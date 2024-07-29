@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Ships</title>
+    <link href="admin_assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="admin_assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="admin_assets/css/custom.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <style>
+.div-square {
+    width: 200px; 
+    height: 200px; 
+    border: 1px solid #000; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    word-wrap: break-word; 
+    background-color: #f9f9f9; 
+    margin: 10px; 
+}
+
+.div-square h4, .div-square p {
+    margin: 5px 0; 
+}
+        .display-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .popup-content {
+            margin-top: 20px;
+        }
+        .popup-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+        .popup .close {
+            cursor: pointer;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .main-display{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .ship-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="adjust-nav">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <img src="admin_assets/img/logo.png" />
+                    </a>
+                </div>
+                <span class="logout-spn">
+                    <a href="#" style="color:#fff;">LOGOUT</a>
+                </span>
+            </div>
+        </div>
+        <!-- /. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <a href="admin.html"><i class="fa fa-desktop "></i>Korisnici <span class="badge">Included</span></a>
+                    </li>
+                    <li class="active-link">
+                        <a href="admin-brodovi.html"><i class="fa fa-table "></i>Brodovi  <span class="badge">Included</span></a>
+                    </li>
+                    <li>
+                        <a href="ticket.html"><i class="fa fa-edit "></i>Karte  <span class="badge">Included</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper">
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2>ADMIN DASHBOARD - SHIPS</h2>
+                    </div>
+                </div>
+                <div class="main-display">
+                <div class="form-container">
+                    <h2>Add Ship</h2>
+                    <form id="add-ship-form" class="ship-form">
+                        <div class="form-group">
+                            <label for="ship_name">Ship Name</label>
+                            <input type="text" id="ship_name" name="ship_name" class="form-control" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="capacity">Capacity</label>
+                            <input type="number" id="capacity" name="capacity" class="form-control" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="starting_destination">Starting Destination</label>
+                            <input type="text" id="starting_destination" name="starting_destination" class="form-control" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="final_destination">Final Destination</label>
+                            <input type="text" id="final_destination" name="final_destination" class="form-control" required>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary" onclick="createShip(event)">Add Ship</button>
+                    </form>
+                </div>
+                <div class="display-section" id="shipDisplay">
+                </div>
+                <div class="popup" id="shipPopup">
+                    <div class="popup-header">
+                        <h4>Ship Actions</h4>
+                        <span class="close" id="shipPopupClose">&times;</span>
+                    </div>
+                    <div class="popup-content">
+                        <p id="shipPopupInfo"></p>
+                    </div>
+                    <div class="popup-buttons">
+                        <button id="deleteShip">Delete Ship</button>
+                        <button id="updateShip">Update Ship</button>
+                    </div>
+                </div>
+                <div class="overlay" id="shipPopupOverlay"></div>
+                <div class="popup" id="updateShipPopup">
+                    <div class="popup-header">
+                        <h4>Update Ship</h4>
+                        <span class="close" id="updateShipPopupClose">&times;</span>
+                    </div>
+                    <div class="popup-content">
+                        <form id="updateShipForm">
+                            <label for="updateShipName">Ship Name:</label>
+                            <input type="text" id="updateShipName" name="shipName" readonly>
+                            <label for="updateShipCapacity">Capacity:</label>
+                            <input type="number" id="updateShipCapacity" name="capacity" required>
+                            <label for="updateShipStartDest">Starting Destination:</label>
+                            <input type="text" id="updateShipStartDest" name="startDest" required>
+                            <label for="updateShipEndDest">Final Destination:</label>
+                            <input type="text" id="updateShipEndDest" name="endDest" required>
+                            <button type="submit" onclick="updateShip(event)">Save</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="overlay" id="updateShipPopupOverlay"></div>
+            </div>
+        </div>
+            <!-- /. PAGE INNER -->
+        </div>
+        <!-- /. PAGE WRAPPER -->
+
+        <!-- Socket.io script -->
+        <script src="../server.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <!-- Custom scripts -->
+        <script src="main.js"></script>
+        <!-- JQUERY SCRIPTS -->
+        <script src="admin_assets/js/jquery-1.10.2.js"></script>
+        <!-- BOOTSTRAP SCRIPTS -->
+        <script src="admin_assets/js/bootstrap.min.js"></script>
+        <!-- CUSTOM SCRIPTS -->
+    </div>
+    <script>
+
+async function createShip(event) {
+            event.preventDefault();
+            const ship_name = document.getElementById('ship_name').value;
+            const capacity = document.getElementById('capacity').value;
+            const starting_destination = document.getElementById('starting_destination').value;
+            const final_destination = document.getElementById('final_destination').value;
+
+            const shipData = {
+                ship_name: ship_name,
+                capacity: capacity,
+                start_dest: starting_destination,
+                end_dest: final_destination
+            };
+            try {
+                const response = await fetch('/createShip', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(shipData)
+                });
+
+                if (response.ok) {
+                    fetchAndDisplayShips();
+                    document.getElementById('add-ship-form').reset();
+                } else {
+                    console.error('Failed to create ship');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+}
+
+        document.getElementById('updateShip').addEventListener('click', function() {
+            const shipName = document.getElementById('shipPopupInfo').innerText;
+            showUpdateShipPopup(shipName);
+        });
+
+        document.getElementById('updateShipPopupClose').addEventListener('click', closeUpdateShipPopup);
+        document.getElementById('updateShipPopupOverlay').addEventListener('click', closeUpdateShipPopup);
+
+
+        async function showUpdateShipPopup(shipName) {
+            document.getElementById('updateShipPopup').style.display = 'block';
+            document.getElementById('updateShipPopupOverlay').style.display = 'block';
+        }
+
+        function closeUpdateShipPopup() {
+            document.getElementById('updateShipPopup').style.display = 'none';
+            document.getElementById('updateShipPopupOverlay').style.display = 'none';
+        }
+
+        async function updateShip(event) {
+            event.preventDefault();
+            const ship_name_form = document.getElementById('updateShipName').value;
+            const capacity_form = document.getElementById('updateShipCapacity').value;
+            const start_dest_form = document.getElementById('updateShipStartDest').value;
+            const end_dest_form = document.getElementById('updateShipEndDest').value;
+
+            const shipData = {
+                ship_name: ship_name_form,
+                capacity: capacity_form,
+                start_dest : start_dest_form,
+                end_dest : end_dest_form
+            };
+
+            try {
+                const response = await fetch(`/updateShipByName/${encodeURIComponent(ship_name_form)}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(shipData)
+            });
+
+                if (response.ok) {
+                    document.getElementById('updateShipPopup').style.display = 'none';
+                    document.getElementById('updateShipPopupOverlay').style.display = 'none';
+                    fetchAndDisplayShips();
+                } else {
+                    console.error('Failed to update ship');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        // Fetchovanje brodova i prikaz
+        async function fetchAndDisplayShips() {
+    try {
+        const response = await fetch('/getAllShips');
+        const ships = await response.json();
+
+        const shipDisplay = document.getElementById('shipDisplay');
+        shipDisplay.innerHTML = '';
+
+        ships.forEach(ship => {
+            const div = document.createElement('div');
+            div.className = 'div-square';
+            div.setAttribute('data-ship-name', ship.ship_name); 
+            div.innerHTML = `
+                <h4>${ship.ship_name}</h4>
+                <p>Capacity: ${ship.capacity}</p>
+                <p>Start Dest.: ${ship.start_dest}</p>
+                <p>End Dest.: ${ship.end_dest}</p>
+            `;
+            div.addEventListener('click', function() {
+                showShipPopup(ship.ship_name);
+            });
+            shipDisplay.appendChild(div);
+        });
+    } catch (error) {
+        console.error('Error fetching ships:', error);
+    }
+}
+        // Pop up prozori
+        async function showShipPopup(shipName) {
+    try {
+        const response = await fetch(`/getShipByName?ship_name=${encodeURIComponent(shipName)}`);
+        const ship = await response.json();
+
+        if (ship) {
+            document.getElementById('shipPopupInfo').innerText = ship.ship_name;
+            document.getElementById('shipPopup').style.display = 'block';
+            document.getElementById('shipPopupOverlay').style.display = 'block';
+
+            document.getElementById('updateShipName').value = ship.ship_name;
+            document.getElementById('updateShipCapacity').value = ship.capacity;
+            document.getElementById('updateShipStartDest').value = ship.start_dest;
+            document.getElementById('updateShipEndDest').value = ship.end_dest;
+
+
+            document.getElementById('updateShip').addEventListener('click', function() {
+                showUpdateShipPopup(shipName);
+            });
+        } else {
+            console.error('Ship not found');
+        }
+    } catch (error) {
+        console.error('Error fetching ship:', error);
+    }
+}
+        document.getElementById('shipPopupClose').addEventListener('click', closeShipPopup);
+        document.getElementById('shipPopupOverlay').addEventListener('click', closeShipPopup);
+
+        function closeShipPopup() {
+            document.getElementById('shipPopup').style.display = 'none';
+            document.getElementById('shipPopupOverlay').style.display = 'none';
+        }
+
+
+        document.getElementById('deleteShip').addEventListener('click', async function() {
+    const shipName = document.getElementById('shipPopupInfo').innerText;
+    
+    try {
+        const response = await fetch(`/deleteShipByName/${shipName}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            console.log('Ship deleted');
+            closeShipPopup();
+            fetchAndDisplayShips();
+        } else {
+            console.error('Error deleting ship');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+        fetchAndDisplayShips();
+    </script>
+</body>
+</html>

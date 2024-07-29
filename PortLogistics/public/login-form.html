@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Page Title</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="./css/login-form.css">
+<script src="/socket.io/socket.io.js"></script>
+<script src="socket.js"></script>
+</head>
+<body>
+    <form id="login_form" class="form_class" onsubmit="registerLoginForm(event)">
+        <div class="form_div">
+            <label>Login:</label>
+            <input id="username_id" class="field_class" name="login_txt" type="text" placeholder="Korisnicko Ime" autofocus>
+            <label>Password:</label>
+            <input id="password_id" class="field_class" name="password_txt" type="password" placeholder="Lozinka">
+            <button class="submit_class" id="register_id" type="submit">Potvrdi podatke korisnika</button>
+        </div>
+        <div class="info_div">
+            <p>Nemate nalog ?  <a href="register.html">Registruj te se !</a></p>
+        </div>
+    </form>
+    <script src="main.js"></script>
+</body>
+</html>
+
